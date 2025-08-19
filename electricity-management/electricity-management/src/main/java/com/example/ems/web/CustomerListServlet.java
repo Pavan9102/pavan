@@ -1,0 +1,45 @@
+package com.example.ems.web;
+
+import com.example.ems.dao.CustomerDao;
+import com.example.ems.model.Customer;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+
+public class CustomerListServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            List<Customer> all = new CustomerDao().findAll();
+            int page = 1; int size = 10; try { page = Integer.parseInt(req.getParameter("page")); } catch (Exception ignored) {}
+            if (page < 1) page = 1;
+            int from = Math.min((page - 1) * size, all.size());
+            int to = Math.min(from + size, all.size());
+            List<Customer> list = all.subList(from, to);
+            req.setAttribute("customers", list);
+            req.setAttribute("page", page);
+            req.setAttribute("hasMore", to < all.size());
+            req.getRequestDispatcher("/WEB-INF/views/customers.jsp").forward(req, resp);
+        } catch (Exception e) {
+            throw new ServletException(e);
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String deleteId = req.getParameter("deleteId");
+        if (deleteId != null) {
+            try {
+                boolean ok = new CustomerDao().deleteIfNoDue(Integer.parseInt(deleteId));
+                resp.sendRedirect("/admin/customers?deleted=" + ok);
+                return;
+            } catch (Exception e) { throw new ServletException(e); }
+        }
+        resp.sendRedirect("/admin/customers");
+    }
+}
+

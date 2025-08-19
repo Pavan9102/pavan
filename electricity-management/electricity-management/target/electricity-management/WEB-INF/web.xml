@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app
+    version="4.0"
+    xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+    xmlns:javaee="http://xmlns.jcp.org/xml/ns/javaee"
+    xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+  <display-name>Archetype Created Web Application</display-name>
+
+  <filter>
+    <filter-name>AuthFilter</filter-name>
+    <filter-class>com.example.ems.web.AuthFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AuthFilter</filter-name>
+    <url-pattern>/app/*</url-pattern>
+  </filter-mapping>
+
+  <servlet>
+    <servlet-name>RegisterServlet</servlet-name>
+    <servlet-class>com.example.ems.web.RegisterServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RegisterServlet</servlet-name>
+    <url-pattern>/register</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>LoginServlet</servlet-name>
+    <servlet-class>com.example.ems.web.LoginServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/login</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>LogoutServlet</servlet-name>
+    <servlet-class>com.example.ems.web.LogoutServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LogoutServlet</servlet-name>
+    <url-pattern>/logout</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>DashboardServlet</servlet-name>
+    <servlet-class>com.example.ems.web.DashboardServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DashboardServlet</servlet-name>
+    <url-pattern>/app/dashboard</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>BillListServlet</servlet-name>
+    <servlet-class>com.example.ems.web.BillListServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>BillListServlet</servlet-name>
+    <url-pattern>/app/bills</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>PayBillServlet</servlet-name>
+    <servlet-class>com.example.ems.web.PayBillServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PayBillServlet</servlet-name>
+    <url-pattern>/app/pay</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>CustomerListServlet</servlet-name>
+    <servlet-class>com.example.ems.web.CustomerListServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CustomerListServlet</servlet-name>
+    <url-pattern>/admin/customers</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>AddBillServlet</servlet-name>
+    <servlet-class>com.example.ems.web.AddBillServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddBillServlet</servlet-name>
+    <url-pattern>/admin/add-bill</url-pattern>
+  </servlet-mapping>
+
+</web-app>

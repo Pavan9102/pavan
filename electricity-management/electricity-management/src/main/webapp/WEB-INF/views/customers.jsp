@@ -41,12 +41,12 @@
       </table>
       <div class="d-flex justify-content-end align-items-center">
         <%
-          Integer page = (Integer) request.getAttribute("page");
+          Integer pageNum = (Integer) request.getAttribute("page");
           Boolean hasMore = (Boolean) request.getAttribute("hasMore");
         %>
-        <a class="btn btn-outline-secondary <%= page <= 1 ? "disabled" : "" %>" href="/admin/customers?page=<%= page-1 %>">Prev</a>
-        <span class="mx-2">Page <%= page %></span>
-        <a class="btn btn-outline-secondary <%= hasMore ? "" : "disabled" %>" href="/admin/customers?page=<%= page+1 %>">Next</a>
+        <a class="btn btn-outline-secondary <%= pageNum <= 1 ? "disabled" : "" %>" href="/admin/customers?page=<%= pageNum-1 %>">Prev</a>
+        <span class="mx-2">Page <%= pageNum %></span>
+        <a class="btn btn-outline-secondary <%= hasMore ? "" : "disabled" %>" href="/admin/customers?page=<%= pageNum+1 %>">Next</a>
       </div>
     </div>
   </body>

@@ -43,14 +43,14 @@
         <a href="/app/pay" class="btn btn-success">Pay Bills</a>
         <div>
           <%
-            Integer page = (Integer) request.getAttribute("page");
+            Integer pageNum = (Integer) request.getAttribute("page");
             Boolean hasMore = (Boolean) request.getAttribute("hasMore");
             String q = request.getParameter("search");
             String query = q == null ? "" : ("&search=" + java.net.URLEncoder.encode(q, "UTF-8"));
           %>
-          <a class="btn btn-outline-secondary <%= page <= 1 ? "disabled" : "" %>" href="/app/bills?page=<%= page-1 %><%= query %>">Prev</a>
-          <span class="mx-2">Page <%= page %></span>
-          <a class="btn btn-outline-secondary <%= hasMore ? "" : "disabled" %>" href="/app/bills?page=<%= page+1 %><%= query %>">Next</a>
+          <a class="btn btn-outline-secondary <%= pageNum <= 1 ? "disabled" : "" %>" href="/app/bills?page=<%= pageNum-1 %><%= query %>">Prev</a>
+          <span class="mx-2">Page <%= pageNum %></span>
+          <a class="btn btn-outline-secondary <%= hasMore ? "" : "disabled" %>" href="/app/bills?page=<%= pageNum+1 %><%= query %>">Next</a>
         </div>
       </div>
     </div>

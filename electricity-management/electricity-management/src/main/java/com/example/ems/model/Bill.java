@@ -5,6 +5,7 @@ public class Bill {
     private Integer customerId;
     private double meterReading;
     private double billAmount;
+    private double paidAmount;
     private String month;
     private int year;
     private String status;
@@ -17,6 +18,8 @@ public class Bill {
     public void setMeterReading(double meterReading) { this.meterReading = meterReading; }
     public double getBillAmount() { return billAmount; }
     public void setBillAmount(double billAmount) { this.billAmount = billAmount; }
+    public double getPaidAmount() { return paidAmount; }
+    public void setPaidAmount(double paidAmount) { this.paidAmount = paidAmount; }
     public String getMonth() { return month; }
     public void setMonth(String month) { this.month = month; }
     public int getYear() { return year; }

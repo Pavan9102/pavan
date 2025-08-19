@@ -16,6 +16,10 @@ public class LoginServlet extends HttpServlet {
         try {
             String loginId = req.getParameter("loginId");
             String password = req.getParameter("password");
+            if (loginId == null || password == null || loginId.isBlank() || password.isBlank()) {
+                resp.sendRedirect("login.jsp?error=Missing+credentials");
+                return;
+            }
             Customer user = new CustomerDao().findByLoginAndPassword(loginId, password);
             if (user == null) {
                 resp.sendRedirect("login.jsp?error=1");

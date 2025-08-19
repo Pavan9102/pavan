@@ -11,6 +11,9 @@
           <div class="card shadow-sm">
             <div class="card-header bg-primary text-white">User Login</div>
             <div class="card-body">
+              <% String err = request.getParameter("error"); if (err != null) { %>
+                <div class="alert alert-danger">Login failed. <%= err.equals("1") ? "Invalid credentials" : err %></div>
+              <% } %>
               <form method="post" action="login">
                 <div class="mb-3">
                   <label class="form-label">User Id</label>

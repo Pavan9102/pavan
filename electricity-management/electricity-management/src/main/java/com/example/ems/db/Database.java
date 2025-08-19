@@ -40,11 +40,17 @@ public class Database {
                     "customer_id INT NOT NULL," +
                     "meter_reading DOUBLE NOT NULL," +
                     "bill_amount DOUBLE NOT NULL," +
+                    "paid_amount DOUBLE NOT NULL DEFAULT 0," +
                     "month VARCHAR(20) NOT NULL," +
                     "year INT NOT NULL," +
                     "status VARCHAR(20) NOT NULL," +
                     "FOREIGN KEY (customer_id) REFERENCES customers(customer_id)" +
                     ")");
+        } catch (SQLException ignored) { }
+
+        // Try to add paid_amount column if DB already existed without it
+        try (Connection conn = getConnection(); Statement st = conn.createStatement()) {
+            st.executeUpdate("ALTER TABLE bills ADD COLUMN paid_amount DOUBLE NOT NULL DEFAULT 0");
         } catch (SQLException ignored) { }
 
         // Seed an admin user if not exists

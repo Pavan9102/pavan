@@ -14,8 +14,15 @@ public class CustomerListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            List<Customer> list = new CustomerDao().findAll();
+            List<Customer> all = new CustomerDao().findAll();
+            int page = 1; int size = 10; try { page = Integer.parseInt(req.getParameter("page")); } catch (Exception ignored) {}
+            if (page < 1) page = 1;
+            int from = Math.min((page - 1) * size, all.size());
+            int to = Math.min(from + size, all.size());
+            List<Customer> list = all.subList(from, to);
             req.setAttribute("customers", list);
+            req.setAttribute("page", page);
+            req.setAttribute("hasMore", to < all.size());
             req.getRequestDispatcher("/WEB-INF/views/customers.jsp").forward(req, resp);
         } catch (Exception e) {
             throw new ServletException(e);

@@ -17,11 +17,14 @@ public class PayBillServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String[] billIds = req.getParameterValues("billId");
-        if (billIds != null) {
+        String[] amounts = req.getParameterValues("amount");
+        if (billIds != null && amounts != null && billIds.length == amounts.length) {
             BillDao dao = new BillDao();
             try {
-                for (String id : billIds) {
-                    dao.markPaid(Integer.parseInt(id));
+                for (int i = 0; i < billIds.length; i++) {
+                    double amt = 0;
+                    try { amt = Double.parseDouble(amounts[i]); } catch (NumberFormatException ignored) { }
+                    if (amt > 0) dao.applyPayment(Integer.parseInt(billIds[i]), amt);
                 }
             } catch (Exception e) {
                 throw new ServletException(e);

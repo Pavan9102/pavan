@@ -22,27 +22,31 @@
       <form method="post" action="/app/pay">
         <table class="table table-bordered">
           <thead>
-            <tr><th></th><th>Bill Id</th><th>Meter Reading</th><th>Month-Year</th><th>Bill Amount</th></tr>
+            <tr><th>Select</th><th>Bill Id</th><th>Month-Year</th><th>Amount</th><th>Paid</th><th>Due</th><th>Pay Now</th></tr>
           </thead>
           <tbody>
             <%
               double total = 0.0;
-              for (Bill b : bills) { total += b.getBillAmount();
+              for (Bill b : bills) {
+                double due = Math.max(0, b.getBillAmount() - b.getPaidAmount());
+                total += due;
             %>
             <tr>
               <td><input type="checkbox" name="billId" value="<%= b.getBillId() %>" /></td>
               <td><%= b.getBillId() %></td>
-              <td><%= b.getMeterReading() %></td>
               <td><%= b.getMonth() %> - <%= b.getYear() %></td>
               <td>₹<%= b.getBillAmount() %></td>
+              <td>₹<%= b.getPaidAmount() %></td>
+              <td>₹<%= due %></td>
+              <td><input class="form-control" type="number" step="0.01" min="0" max="<%= due %>" name="amount" placeholder="0.00" /></td>
             </tr>
             <% } %>
           </tbody>
           <tfoot>
-            <tr><th colspan="4" class="text-end">Payment Total</th><th>₹<%= total %></th></tr>
+            <tr><th colspan="6" class="text-end">Total Due</th><th>₹<%= total %></th></tr>
           </tfoot>
         </table>
-        <button class="btn btn-primary">Pay Bill</button>
+        <button class="btn btn-primary">Pay Selected</button>
       </form>
     </div>
   </body>

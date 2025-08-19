@@ -9,14 +9,15 @@ import java.util.List;
 
 public class BillDao {
     public void insert(Bill b) throws SQLException {
-        String sql = "INSERT INTO bills (customer_id,meter_reading,bill_amount,month,year,status) VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO bills (customer_id,meter_reading,bill_amount,paid_amount,month,year,status) VALUES (?,?,?,?,?,?,?)";
         try (Connection conn = Database.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, b.getCustomerId());
             ps.setDouble(2, b.getMeterReading());
             ps.setDouble(3, b.getBillAmount());
-            ps.setString(4, b.getMonth());
-            ps.setInt(5, b.getYear());
-            ps.setString(6, b.getStatus());
+            ps.setDouble(4, b.getPaidAmount());
+            ps.setString(5, b.getMonth());
+            ps.setInt(6, b.getYear());
+            ps.setString(7, b.getStatus());
             ps.executeUpdate();
         }
     }
@@ -68,16 +69,19 @@ public class BillDao {
     }
 
     public double dueAmount(int customerId) throws SQLException {
-        String sql = "SELECT COALESCE(SUM(bill_amount),0) FROM bills WHERE customer_id=? AND status <> 'Paid'";
+        String sql = "SELECT COALESCE(SUM(bill_amount - paid_amount),0) FROM bills WHERE customer_id=? AND status <> 'Paid'";
         try (Connection conn = Database.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, customerId);
             try (ResultSet rs = ps.executeQuery()) { rs.next(); return rs.getDouble(1); }
         }
     }
 
-    public void markPaid(int billId) throws SQLException {
-        try (Connection conn = Database.getConnection(); PreparedStatement ps = conn.prepareStatement("UPDATE bills SET status='Paid' WHERE bill_id=?")) {
-            ps.setInt(1, billId);
+    public void applyPayment(int billId, double amount) throws SQLException {
+        String sql = "UPDATE bills SET paid_amount = paid_amount + ?, status = CASE WHEN paid_amount + ? >= bill_amount THEN 'Paid' ELSE 'Partial' END WHERE bill_id=?";
+        try (Connection conn = Database.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setDouble(1, amount);
+            ps.setDouble(2, amount);
+            ps.setInt(3, billId);
             ps.executeUpdate();
         }
     }
@@ -88,6 +92,7 @@ public class BillDao {
         b.setCustomerId(rs.getInt("customer_id"));
         b.setMeterReading(rs.getDouble("meter_reading"));
         b.setBillAmount(rs.getDouble("bill_amount"));
+        try { b.setPaidAmount(rs.getDouble("paid_amount")); } catch (SQLException ignored) { b.setPaidAmount(0); }
         b.setMonth(rs.getString("month"));
         b.setYear(rs.getInt("year"));
         b.setStatus(rs.getString("status"));

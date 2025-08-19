@@ -28,10 +28,10 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- Derby embedded database -->
+    <!-- Derby client (network server) - requires you to start Derby server manually -->
     <dependency>
       <groupId>org.apache.derby</groupId>
-      <artifactId>derby</artifactId>
+      <artifactId>derbyclient</artifactId>
       <version>10.16.1.1</version>
     </dependency>
 
